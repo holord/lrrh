@@ -8,7 +8,6 @@ skills["perception"] = 0
 skills["persuasion"] = 0
 skills["witchcraft"] = 0
 
-
 local click = false
 local text
 local message = nil
@@ -17,7 +16,6 @@ local p = 20
 local y 
 local points = 2
 local firstSetSkill = true
-
 
 local function init()
     story.current = story.start
@@ -37,8 +35,6 @@ local function init()
     firstSetSkill = true
 end
 
-
-
 local function textdraw()
     y = p
     if(message) then
@@ -57,7 +53,6 @@ end
 
 local function choices() -- button
     local width, wrappedtext = font:getWrap(text, love.graphics.getWidth() - p)
-
     local yadd = font:getHeight() * (#wrappedtext + 0.75)
 
     y = y + yadd + 10
@@ -299,12 +294,12 @@ story.meadow.draw = function()
         message.text = "Perception lvl. 1 fail"
         message.color = {0.75, 0, 0}
         text = "While you pick daisies you notice that it suddenly got darker but only in a circle around you. As you stand still \z
-        you begin to hear something breathing behind you, too late you realise it could be a hungry beast out for some meat. You \z
-        know any sudden movement could cost your life so you slowly stand up, your heart beating faster then ever and walk back \z
-        towards the path. You can feel the beast's presence behind you, it must be hungry. When you finally step on the \z
-        well-known cobblestones of the path, you hear a jaw clenching and a sudden warmth starts spreading all over your body. \z
-        As you look down at your feet you see blood spilling everywhere and the wolf getting ready for another attack. The last \z
-        things you see are its eyes and you know it is the end. You want to scream but no sound comes out, it ate you. THE END"
+        you begin to hear something breathing behind you, too late you realise it could be a hungry wolf. You know any sudden \z
+        movement could cost your life so you slowly stand up, your heart beating faster then ever and walk back towards the path. \z
+        You can feel the beast's presence behind you, it must be hungry. When you finally step on the well-known cobblestones of \z
+        the path, you hear a jaw clenching and a sudden warmth starts spreading all over your body. As you look down at your feet \z
+        you see blood spilling everywhere and the wolf getting ready for another attack. The last things you see are its eyes and \z
+        you know it is the end. You want to scream but no sound comes out, it ate you. THE END"
 
         ch =
         {
@@ -487,6 +482,7 @@ story.battle.draw = function()
 
     textdraw()
     local chosen = choices()
+
     if(chosen == "restart") then
         story.current = story.start
         init()
@@ -498,9 +494,9 @@ end
 story.house = {}
 story.house.draw = function()
     -------- Surprise --------
-    text = "Upon entering the room a chill goes down your spine. Your poor grandmother is very sick you noticed... You notice she \z
-    is asleep but looks terrible. She has huge ears and eyes, her hands are very hairy and from her mouth big yellow teeth stick \z
-    out. You can't not scream."
+    text = "Upon entering the room a chill goes down your spine. Your poor grandmother is very sick you noticed... She is asleep \z
+    but looks terrible. She has huge ears and eyes, her hands are very hairy and from her mouth big yellow teeth stick out. You \z
+    can't not scream."
 
     ch = 
     {
@@ -509,6 +505,7 @@ story.house.draw = function()
 
     textdraw()
     local chosen = choices()
+
     if(chosen == "continue") then
         story.current = story.houseBedroom
     end
@@ -533,6 +530,7 @@ story.houseBedroom.draw = function()
 
         textdraw()
         local chosen = choices()
+
         if(chosen == "continue") then
             story.current = story.houseLadle
         end
@@ -550,6 +548,7 @@ story.houseBedroom.draw = function()
 
         textdraw()
         local chosen = choices()
+
         if(chosen == "restart") then
             story.current = story.start
             init()
@@ -575,6 +574,7 @@ story.houseLadle.draw = function()
 
         textdraw()
         local chosen = choices()
+        
         if(chosen == "restart") then
             story.current = story.start
             init()
