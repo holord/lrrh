@@ -1,7 +1,6 @@
 local gameState = {}
 
 local font = require "font"
-
 local story = require "story"
 
 function gameState.load()

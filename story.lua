@@ -93,8 +93,8 @@ end
 
 story.start = {}
 story.start.draw = function()
-    text = "Good morning Little Red! Have you slept well? A new day has just awoken, there is a lot to do around the house. \z
-    What would you like to do?"
+    text = "Good morning Little Red Riding Hood! Have you slept well? A new day has just awoken, there is a lot to do around the \z
+    house. What would you like to do?"
 
     ch =
     {
@@ -295,26 +295,18 @@ story.meadow.draw = function()
         message.color = {0.75, 0, 0}
         text = "While you pick daisies you notice that it suddenly got darker but only in a circle around you. As you stand still \z
         you begin to hear something breathing behind you, too late you realise it could be a hungry wolf. You know any sudden \z
-        movement could cost your life so you slowly stand up, your heart beating faster then ever and walk back towards the path. \z
-        You can feel the beast's presence behind you, it must be hungry. When you finally step on the well-known cobblestones of \z
-        the path, you hear a jaw clenching and a sudden warmth starts spreading all over your body. As you look down at your feet \z
-        you see blood spilling everywhere and the wolf getting ready for another attack. The last things you see are its eyes and \z
-        you know it is the end. You want to scream but no sound comes out, it ate you. THE END"
+        movement could cost your life so you slowly stand up, your heart beating faster then ever and walk back towards the path."
 
         ch =
         {
-            {"restart", "Restart game"},
-            {"exit", "Exit game"},
+            {"continue", "Continue"},
         }
-
+    
         textdraw()
         local chosen = choices()
-
-        if(chosen == "restart") then
-            story.current = story.start
-            init()
-        elseif(chosen == "exit") then
-            love.event.quit()
+    
+        if(chosen == "continue") then
+            story.current = story.meadow2
         end
     elseif(skills["perception"]) then
         message = {}
@@ -338,6 +330,30 @@ story.meadow.draw = function()
         if(chosen == "continue") then
             story.current = story.wander
         end
+    end
+end
+
+story.meadow2 = {}
+story.meadow2.draw = function()
+    text = "You can feel the beast's presence behind you, it must be hungry. When you finally step on the well-known cobblestones of \z
+    the path, you hear a jaw clenching and a sudden warmth starts spreading all over your body. As you look down at your feet \z
+    you see blood spilling everywhere and the wolf getting ready for another attack. The last things you see are its eyes and \z
+    you know it is the end. You want to scream but no sound comes out, it ate you... THE END"
+
+    ch =
+        {
+            {"restart", "Restart game"},
+            {"exit", "Exit game"},
+        }
+
+    textdraw()
+    local chosen = choices()
+
+    if(chosen == "restart") then
+        story.current = story.start
+        init()
+    elseif(chosen == "exit") then
+        love.event.quit()
     end
 end
 
