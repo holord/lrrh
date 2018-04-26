@@ -35,7 +35,15 @@ local function init()
     firstSetSkill = true
 end
 
+love.graphics.setDefaultFilter("nearest", "nearest")
+local redImage = love.graphics.newImage("red.png")
+local wolfImage = love.graphics.newImage("wolf.png")
+
 local function textdraw()
+    local scale = 3.5
+    love.graphics.draw(redImage, 0, love.graphics.getHeight()-38*scale, 0, scale, scale)
+    love.graphics.draw(wolfImage, love.graphics.getWidth()-25*scale, love.graphics.getHeight()-38*scale, 0, scale, scale)
+
     y = p
     if(message) then
         love.graphics.setColor(message.color)
