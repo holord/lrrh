@@ -11,7 +11,7 @@ skills["witchcraft"] = 0
 local click = false
 local text
 local message = nil
-local ch -- choices
+local ch -- Choice
 local p = 20
 local y 
 local points = 2
@@ -29,7 +29,7 @@ local function init()
     click = false
     text = nil
     message = nil
-    ch = nil -- choices
+    ch = nil
     p = 20
     points = 2
     firstSetSkill = true
@@ -40,7 +40,7 @@ local redImage = love.graphics.newImage("red.png")
 local wolfImage = love.graphics.newImage("wolf.png")
 
 local function textdraw()
-    local scale = 3.5
+    local scale = 4
     love.graphics.draw(redImage, 0, love.graphics.getHeight()-38*scale, 0, scale, scale)
     love.graphics.draw(wolfImage, love.graphics.getWidth()-25*scale, love.graphics.getHeight()-38*scale, 0, scale, scale)
 
@@ -59,7 +59,7 @@ local function textdraw()
     love.graphics.printf(text, p, y, love.graphics.getWidth() - p)
 end
 
-local function choices() -- button
+local function choices() -- Button
     local width, wrappedtext = font:getWrap(text, love.graphics.getWidth() - p)
     local yadd = font:getHeight() * (#wrappedtext + 0.75)
 
@@ -69,9 +69,9 @@ local function choices() -- button
     for i, choice in ipairs(ch) do
         local x = p + 40
 
-        local w = love.graphics.getWidth() - 1.4 * x - p -- right indent of the button
+        local w = love.graphics.getWidth() - 1.4 * x - p
         local width, wrappedtext = font:getWrap(choice[2], w)
-        local h = font:getHeight() * 1.25 * (#wrappedtext) -- width of the button
+        local h = font:getHeight() * 1.25 * (#wrappedtext)
 
         local mx, my = love.mouse.getPosition()
         if(mx > x and mx < x + w and my > y and my < y + h) then
@@ -89,7 +89,6 @@ local function choices() -- button
         end
 
         love.graphics.printf(choice[2], x, y, w)
-
         y = y + 10 + font:getHeight(choice[2])
     end
 
@@ -99,10 +98,30 @@ local function choices() -- button
     return res
 end
 
+story.menu = {}
+story.menu.draw = function()
+    text = "Little Red Riding Hood\nA text-based RPG"
+
+    ch =
+    {
+        {"start", "Start game"},
+        {"exit", "Exit"}
+    }
+
+    textdraw()
+    local chosen = choices()
+
+    if(chosen == "start") then
+        story.current = story.start
+    elseif(chosen == "exit") then
+        love.event.quit()
+    end
+end
+
 story.start = {}
 story.start.draw = function()
-    text = "Good morning Little Red Riding Hood! Have you slept well? A new day has just awoken, there is a lot to do around the \z
-    house. What would you like to do?"
+    text = "Good morning Little Red Riding Hood! Have you slept well? A new day has just awoken, there is a lot to do around \z
+    the house. What would you like to do?"
 
     ch =
     {
@@ -185,8 +204,8 @@ end
 
 story.visit = {}
 story.visit.draw = function()
-    text = "You decide to go to your grandmother's house. She's been sick for the past week and can't get out of bed. You \z
-    pack her food in a basket and head off to the heart of the woods where her house is."
+    text = "You decide to go to your grandmother's house. She's been sick for the past week and can't get out of bed. You pack \z
+    her food in a basket and head off to the heart of the woods where her house is."
 
     ch =
     {
@@ -203,9 +222,8 @@ end
 
 story.notebook = {}
 story.notebook.draw = function()
-    text = "Suddenly you hear a voice calling after you. As you turn around you see your mother running after you before \z
-    you the woods consume you. She hands you a little notebook. She tells you: \"My love, take this with you. It will help \z
-    you in difficult situations.\" And with that she sends you off and walks back to the house."
+    text = "Suddenly you hear a voice calling after you. As you turn around you see your mother running after you and without a \z
+    word she hands you a little notebook which you recognise immediately. Then she sends you off and walks back to the house."
 
     ch =
     {
@@ -226,10 +244,9 @@ end
 story.setSkill = {}
 story.setSkill.draw = function()
     if(firstSetSkill) then
-        text = "What you see now in your hands is a magic inbued notebook in which you see five categories. You recall a memory \z
-        of your mother telling you once that setting one of these categories a higher value, you can absorb its energy and your \z
-        life skills become greater and better. You can gain inhuman power with the help of this little book. You hold it in \z
-        your hands and promise yourself you will keep it safe and use it wisely. Now, what new powers would you like to learn?"
+        text = "What you see now in your hands is a magic imbued notebook in which you see five categories. You recall a memory \z
+        of your mother telling you once that you can gain inhuman power with the help of this little book. You promise yourself \z
+        you will keep it safe and use it wisely. Now, what new powers would you like to learn?"
     else
         text = "What new powers would you like to learn?"
     end
@@ -272,13 +289,30 @@ end
 
 -------- Picking flowers --------
 
+-- In the following I broke up the text in order to narrate/ create tension between the lines
 story.forest = {}
 story.forest.draw = function()
     text = "Soon your house is out of sight but knowing the way you continue on without fear. You and your mother have done \z
-    the trip several times and you know the path by heart. On your way you observe the beauty of the woods, listen to the \z
-    song of birds and enjoy the breeze that strokes your cheeks. You observe a patch of wild flowers off the path and decide \z
-    your grandmother would love them. Although your mother has warned you not to stray off the path you still think some \z
-    flowers could not harm anyone."
+    the trip several times and you know the path by heart. On your way you observe the beauty of the woods, listen to the song \z
+    of birds and enjoy the breeze that strokes your cheeks."
+
+    ch =
+    {
+        {"continue", "Continue"},
+    }
+
+    textdraw()
+    local chosen = choices()
+
+    if(chosen == "continue") then
+        story.current = story.forest2
+    end
+end
+
+story.forest2 = {}
+story.forest2.draw = function()
+    text = "You observe a patch of wild flowers off the path and decide your grandmother would love them. Although your mother \z
+    has warned you not to stray off the path you still think some flowers could not harm anyone."
 
     ch =
     {
@@ -321,11 +355,7 @@ story.meadow.draw = function()
         message.text = "Perception lvl. 1 success"
         message.color = {0, 0.75, 0}
         text = "While picking flowers you feel the presence of another. Your senses tell you you're in danger so with one great \z
-        jump you avoid the attack and find yourself eye to eye with the hungry wolf. It growls at you... You reply: \"I am \z
-        on my way to my grandmother's house\". It seems to consider your reply then growls again. You say: \"She lives not far \z
-        away from here, just after crossing the stream, to the right.\" The wolf suddenly runs off in the opposite direction but \z
-        you give it no attention since you're not in danger anymore. You growl back at it, putting an end to the conversation, \z
-        and head off towards your grandmother's."
+        jump you avoid the attack and find yourself eye to eye with the hungry wolf. It growls at you..."
 
         ch =
         {
@@ -336,7 +366,7 @@ story.meadow.draw = function()
         local chosen = choices()
 
         if(chosen == "continue") then
-            story.current = story.wander
+            story.current = story.dialogue
         end
     end
 end
@@ -344,15 +374,48 @@ end
 story.meadow2 = {}
 story.meadow2.draw = function()
     text = "You can feel the beast's presence behind you, it must be hungry. When you finally step on the well-known cobblestones of \z
-    the path, you hear a jaw clenching and a sudden warmth starts spreading all over your body. As you look down at your feet \z
-    you see blood spilling everywhere and the wolf getting ready for another attack. The last things you see are its eyes and \z
-    you know it is the end. You want to scream but no sound comes out, it ate you... THE END"
+    the path, you hear a jaw clenching and a sudden warmth starts spreading all over your body."
 
     ch =
-        {
-            {"restart", "Restart game"},
-            {"exit", "Exit game"},
-        }
+    {
+        {"continue", "Continue"},
+    }
+
+    textdraw()
+    local chosen = choices()
+
+    if(chosen == "continue") then
+        story.current = story.meadow3
+    end
+end
+
+story.meadow3 = {}
+story.meadow3.draw = function()
+    text = "As you look down at your feet you see blood spilling everywhere and the wolf getting ready for another attack."
+    
+    ch =
+    {
+        {"continue", "Continue"},
+    }
+
+    textdraw()
+    local chosen = choices()
+
+    if(chosen == "continue") then
+        story.current = story.meadow4
+    end
+end
+
+story.meadow4 = {}
+story.meadow4.draw = function()
+    text = "The last things you see are its eyes and you know it is the end. You want to scream but no sound comes out, it ate you... \z
+    THE END"
+    
+    ch =
+    {
+        {"restart", "Restart game"},
+        {"exit", "Exit game"},
+    }
 
     textdraw()
     local chosen = choices()
@@ -365,16 +428,85 @@ story.meadow2.draw = function()
     end
 end
 
+story.dialogue = {}
+story.dialogue.draw = function()
+    text = "You reply: \"I am on my way to my grandmother's house\". It seems to consider your reply then growls again."
+    
+    ch =
+    {
+        {"continue", "Continue"},
+    }
+
+    textdraw()
+    local chosen = choices()
+
+    if(chosen == "continue") then
+        story.current = story.dialogue2
+    end
+end
+
+story.dialogue2 = {}
+story.dialogue2.draw = function()
+    text = "You say: \"She lives not far away from here, just after crossing the stream.\" The wolf suddenly runs off in the \z
+    opposite direction but you give it no attention since you're not in danger anymore. You growl back at it, putting an end \z
+    to the conversation, and head off towards your grandmother's."
+
+    ch =
+    {
+        {"continue", "Continue"},
+    }
+
+    textdraw()
+    local chosen = choices()
+
+    if(chosen == "continue") then
+        story.current = story.walk
+    end
+end
+
 -------- Rest by the lake --------
 
-story.wander = {}
-story.wander.draw = function()
+story.walk = {}
+story.walk.draw = function()
     text = "Slowly following the path you admire the beauty of your surroundings. Huge butterflies fly by, you hear woodpeckers \z
-    working in the distance, flowers bloom all around and you know the forest is busy alive. You look up to check the position of \z
-    the sun and notice it's soon noon, no surprise you're hungry. Knowing the lake from with the stream starts is not far away, \z
-    you head in the direction. A couple of minutes later you find yourself at the feet of the great lake. You find a shady spot \z
-    and have your elevenses. Sitting there the food doesn't taste good because you're still troubled by the earlier encounter \z
-    with the wolf and you realise you're trembling."
+    working in the distance, flowers bloom all around and you know the forest is busy alive."
+
+    ch =
+    {
+        {"continue", "Continue"},
+    }
+
+    textdraw()
+    local chosen = choices()
+
+    if(chosen == "continue") then
+        story.current = story.walk2
+    end
+end
+
+story.walk2 = {}
+story.walk2.draw = function()
+    text = "You look up to check the position of the sun and notice it's soon noon, no surprise you're hungry. Knowing the lake \z
+    from which the stream starts is not far away, you head in the direction."
+
+    ch =
+    {
+        {"continue", "Continue"},
+    }
+
+    textdraw()
+    local chosen = choices()
+
+    if(chosen == "continue") then
+        story.current = story.walk3
+    end
+end
+
+story.walk3 = {}
+story.walk3.draw = function()
+    text = "A couple of minutes later you find yourself at the feet of the great lake. You find a shady spot and have your \z
+    elevenses. Sitting there the food doesn't taste good because you're still troubled by the earlier encounter with the wolf \z
+    and you realise you're trembling."
 
     ch =
     {
@@ -392,11 +524,45 @@ end
 story.lake = {}
 story.lake.draw = function()
     text = "You get ready to leave but before you head off you notice the notebook is nowhere to be found! A sudden fear spreads \z
-    inside you. After running around for minutes you sit back down feeling miserable. You can't believe you have already lost the \z
+    inside you."
+
+    ch =
+    {
+        {"continue", "Continue"},
+    }
+
+    textdraw()
+    local chosen = choices()
+
+    if(chosen == "continue") then
+        story.current = story.lake2
+    end
+end
+
+story.lake2 = {}
+story.lake2.draw = function()
+    text = "After running around for minutes you sit back down feeling miserable. You can't believe you have already lost the \z
     precious thing. You start packing everything back in the basket. When you stand up you see a shiny spot in you peripheral \z
-    vision. Turning around you lose it but after a time you notice it shining again in the sunlight. You get closer and find your \z
-    notebook opened in the grass. You pick it up fast. Turn it in your hands. Examine it. Nothing happened to it, you probably \z
-    dropped it. You thank God you found it and in light of what has happened, you decide to spend 2 points on your skills."
+    vision. Turning around you lose it but after a time you notice it shining again in the sunlight."
+
+    ch =
+    {
+        {"continue", "Continue"},
+    }
+
+    textdraw()
+    local chosen = choices()
+
+    if(chosen == "continue") then
+        story.current = story.lake3
+    end
+end
+
+story.lake3 = {}
+story.lake3.draw = function()
+    text = "You get closer and find your notebook opened in the grass. You pick it up fast. Turn it in your hands. Examine it. \z
+    Nothing happened to it, you probably dropped it. You thank God you found it and in light of what has just happened, you decide \z
+    spending 2 points on your skills before you lose it again."
 
     ch =
     {
@@ -412,6 +578,8 @@ story.lake.draw = function()
     end
 end
 
+-------- Twists --------
+
 story.powers = {}
 story.powers.draw = function()
     if(skills["witchcraft"] == 2) then
@@ -421,26 +589,18 @@ story.powers.draw = function()
         message.color = {0, 0.75, 0}
         text = "You decide you want to see how strong your witch skills are so you call out to the spririt of the woods and ask \z
         them to lend you all their power. As you feel the energy flowing through your veins, you concentrate on the hairy body of \z
-        the wolf. Not a second later you locate it, deep in the forest. You charm it with you energy and make it come to you. You \z
-        see fiery anger in its eyes but you feel safe with you powers. Despite you powers the wolf opens its mouth, saliva dripping \z
-        from it and you realise it still wants to eat you. The wolf gathers energy for a final attack. Noticing the momentum you \z
-        grab hold of its tongue and pull it with all your might... and, there, in front of your eyes you find the wolf is nothing \z
-        more then a pink, skinny abomination. You turned it inside out! It runs off in shame, never to be seen again... THE END"
+        the wolf. Not a second later you locate it, deep in the forest."
         
         ch =
         {
-            {"restart", "Restart game"},
-            {"exit", "Exit game"},
+            {"continue", "Continue"},
         }
 
         textdraw()
         local chosen = choices()
 
-        if(chosen == "restart") then
-            story.current = story.start
-            init()
-        elseif(chosen == "exit") then
-            love.event.quit()
+        if(chosen == "continue") then
+            story.current = story.witch
         end
     elseif(skills["animal handling"] == 2 and skills["persuasion"] == 1) then
         -------- Preparation for the battle --------
@@ -449,10 +609,7 @@ story.powers.draw = function()
         message.color = {0, 0.75, 0}
         text = "You feel it's time to punish the wolf... You call out to the animals of the forest and form an allince against the \z
         wolf. You form a council with representatives of each type of animal in the troops. After hours of planning you finally \z
-        come to a great plan of ambush. Your infantry will be made of foxes who rely on their speed and will attack the wolf in \z
-        bursts. While they hold the front, cavalry of rodents on the back of elks will keep firing rocks at the beast to disturb \z
-        its concentration. If any side of the army gets hurt and falls, a group of five brown bears will flank that side of the \z
-        enemy. After the council you decide on holding the event the next day while the wolf drinks its morning water by the stream."
+        come to a great plan of ambush."
 
         ch =
         {
@@ -463,10 +620,9 @@ story.powers.draw = function()
         local chosen = choices()
 
         if(chosen == "continue") then
-            story.current = story.battle
+            story.current = story.plan
         end
     else
-        -------- The grandmother's house --------
         text = "Not long after crossing the stream you succesfully arrive to your grandmother's house. You take the key from under \z
         the doormat and open the front door. You set the table for a lunch for two and call after your grandmother. She doesn't \z
         answer... You know she usually sleeps in the afternoon but not before lunch so you go in to her room to check if everything's \z
@@ -486,17 +642,130 @@ story.powers.draw = function()
     end
 end
 
+-------- Witching --------
+
+story.witch = {}
+story.witch.draw = function()
+    text = "You charm it with you energy and make it come to you. You see fiery anger in its eyes but you feel safe with you powers. \z
+    Despite your powers the wolf opens its mouth, saliva dripping from it and you realise it still wants to eat you. The wolf gathers \z
+    energy for an attack."
+
+    ch =
+    {
+        {"continue", "Continue"},
+    }
+
+    textdraw()
+    local chosen = choices()
+
+    if(chosen == "continue") then
+        story.current = story.witch2
+    end
+end
+
+story.witch2 = {}
+story.witch2.draw = function()
+    text = "Noticing the momentum you grab hold of its tongue and pull it with all your might... and, there, in front of your eyes you \z
+    find the wolf is nothing more than a pink, skinny abomination. You turned it inside out! It runs off in shame, never to be seen \z
+    again... THE END"
+
+    ch =
+    {
+        {"restart", "Restart game"},
+        {"exit", "Exit game"},
+    }
+
+    textdraw()
+    local chosen = choices()
+
+    if(chosen == "restart") then
+        story.current = story.start
+        init()
+    elseif(chosen == "exit") then
+        love.event.quit()
+    end
+end
+
+-------- The battle --------
+
+story.plan = {}
+story.plan.draw = function()
+    text = "Your infantry will be made of foxes who rely on their speed and will attack the wolf in bursts. While they hold \z
+    the front, cavalry of rodents on the back of elks will keep firing rocks at the beast to disturb its concentration. If \z
+    any side of the army gets hurt and falls, a group of five brown bears will flank that side of the enemy. After the \z
+    council you decide on holding the event the next day while the wolf drinks its morning water by the stream."
+
+    ch =
+    {
+        {"continue", "Continue"},
+    }
+
+    textdraw()
+    local chosen = choices()
+
+    if(chosen == "continue") then
+        story.current = story.battle
+    end
+end
+
 story.battle = {}
 story.battle.draw = function()
-    -------- The battle --------
     text = "The next day, before sunrise everyone takes their position. You are in the front, ready to signal the attack. All you \z
-    need is the wolf. But it is nowhere to be seen... You all start panicking. After some time it finally arrives and you signal \z
-    the attack. Everyone jumps from their hideout, takes their position and the wolf is held tight. It is very annoyed and you can see \z
-    it fights back. The battle seems like an eternity... The wolf is a great fighter you notice, it keeps trying to create a hole \z
-    in your defences and escape. Just when this happens the bears run from behind the trees while the cavalry and infantry closes \z
-    in. Soon the wolf is captured! You let the bears torture it for some time and when it is on its edge you signal for its last \z
-    breath. In that moment the bears tear him apart with ease. It is cruelty, you admit, but it is necessary to deal with an enemy \z
-    like the wolf. THE END"
+    need is the wolf. But it is nowhere to be seen... You all start panicking."
+
+    ch = 
+    {
+        {"continue", "Continue"},
+    }
+
+    textdraw()
+    local chosen = choices()
+
+    if(chosen == "continue") then
+        story.current = story.battle2
+    end
+end
+
+story.battle2 = {}
+story.battle2.draw = function()
+    text = "After some time it finally arrives and you signal the attack. Everyone jumps from their hideout, takes their position \z
+    and the wolf is held tight. It is very annoyed and you can see it fights back. The battle seems like an eternity..."
+
+    ch = 
+    {
+        {"continue", "Continue"},
+    }
+
+    textdraw()
+    local chosen = choices()
+
+    if(chosen == "continue") then
+        story.current = story.battle3
+    end
+end
+
+story.battle3 = {}
+story.battle3.draw = function()
+    text = "The wolf is a great fighter you notice, it keeps trying to create a hole in your defences and escape. Just when this \z
+    happens the bears run from behind the trees while the cavalry and infantry closes in. Soon the wolf is captured!"
+
+    ch = 
+    {
+        {"continue", "Continue"},
+    }
+
+    textdraw()
+    local chosen = choices()
+
+    if(chosen == "continue") then
+        story.current = story.battle4
+    end
+end
+
+story.battle4 = {}
+story.battle4.draw = function()
+    text = "You let the bears torture it for some time and when it is on its edge you signal for its last breath. In that moment the \z
+    bears tear him apart with ease. It is cruelty, you admit, but it is necessary to deal with an enemy like the wolf. THE END"
 
     ch = 
     {
@@ -514,6 +783,8 @@ story.battle.draw = function()
         love.event.quit()
     end
 end
+
+-------- The grandmother's house --------
 
 story.house = {}
 story.house.draw = function()
@@ -586,25 +857,56 @@ story.houseLadle = {}
 story.houseLadle.draw = function()
     text = "Ladle in the hand, you dodge its first attack and try to hit back. You give it a whack to the head, you catch it \z
     unprepared. It becomes furious and scratches you with its claws. You feel great pain in your arm and become fed up with the \z
-    wolf. You enter a berserk mode, not experiencing any further pain, and beat it up clearly. You hit it as hard as you can in \z
-    the chest and while it staggers you whack it once again in the head. It then falls prone on to the wooden floor, unconscious. \z
-    This is all too much for you so you run back home and promise yourself you'll not leave home for a while. THE END"
+    wolf."
 
-        ch = 
-        {
-            {"restart", "Restart game"},
-            {"exit", "Exit game"},
-        }
+    ch =
+    {
+        {"continue", "Continue"},
+    }
 
-        textdraw()
-        local chosen = choices()
+    textdraw()
+    local chosen = choices()
+    if(chosen == "continue") then
+        story.current = story.houseLadle2
+    end
+end
+
+story.houseLadle2 = {}
+story.houseLadle2.draw = function()
+    text = "You enter a berserk mode, not experiencing any further pain, and beat it up clearly. You hit it as hard as you can in \z
+    the chest and while it staggers you whack it once again in the head. It then falls prone on to the wooden floor, unconscious."
+    
+    ch =
+    {
+        {"continue", "Continue"},
+    }
+
+    textdraw()
+    local chosen = choices()
+    if(chosen == "continue") then
+        story.current = story.houseLadle3
+    end
+end
+
+story.houseLadle3 = {}
+story.houseLadle3.draw = function()
+    text = "This is all too much for you so you run back home and promise yourself you'll not leave home for a while. THE END"
+    
+    ch = 
+    {
+        {"restart", "Restart game"},
+        {"exit", "Exit game"},
+    }
+
+    textdraw()
+    local chosen = choices()
         
-        if(chosen == "restart") then
-            story.current = story.start
-            init()
-        elseif(chosen == "exit") then
-            love.event.quit()
-        end
+    if(chosen == "restart") then
+        story.current = story.start
+        init()
+    elseif(chosen == "exit") then
+        love.event.quit()
+    end
 end
 
 return story

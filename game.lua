@@ -4,12 +4,10 @@ local font = require "font"
 local story = require "story"
 
 function gameState.load()
-    story.current = story.start
+    story.current = story.menu
 end
 
-function gameState.update(dt)
-    --
-end
+function gameState.update(dt) end
 
 function gameState.draw()
     love.graphics.setFont(font)
