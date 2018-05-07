@@ -1,3 +1,3 @@
-local font = love.graphics.newFont("monogram.ttf", 32)
+font = love.graphics.newFont("monogram.ttf", 32)
 --
-return font
+--return font

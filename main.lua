@@ -19,6 +19,8 @@ lovecallbacks = {
     "filedropped",
 }
 
+love.graphics.setDefaultFilter("nearest", "nearest")
+
 local gameState = require "game"
 
 function loadState(newState, arg)

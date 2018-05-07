@@ -1,4 +1,4 @@
-local font = require "font"
+--local font = require "font"
 
 local story = {}
 local skills = {}
@@ -40,7 +40,7 @@ local redImage = love.graphics.newImage("red.png")
 local wolfImage = love.graphics.newImage("wolf.png")
 
 local function textdraw()
-    local scale = 4
+    local scale = love.graphics.getWidth() * love.graphics.getHeight() * 3 / (800 * 600)
     love.graphics.draw(redImage, 0, love.graphics.getHeight()-38*scale, 0, scale, scale)
     love.graphics.draw(wolfImage, love.graphics.getWidth()-25*scale, love.graphics.getHeight()-38*scale, 0, scale, scale)
 
